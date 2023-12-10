@@ -1,3 +1,3 @@
 #!/bin/sh
 
-go build -ldflags="-s -w" -o xdp-pktgen ./cmd/pktgen/main.go
+go build -ldflags="-s -w" -o xdp-pktgen ./cmd/pktgen/*.go

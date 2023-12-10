@@ -1,3 +1,5 @@
+//go:build linux
+
 package main
 
 import (
@@ -9,7 +11,6 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"syscall"
 	"time"
 	"xdp-dos/netinfo"
 
@@ -55,7 +56,7 @@ func main() {
 	host := raddr.IP
 	port := fopts.Port
 
-	routes, err := netlink.RouteGet(host)
+	routes, err := getRoutes(host)
 	if err != nil {
 		panic(err)
 	}
@@ -66,12 +67,12 @@ func main() {
 
 	gw := routes[0]
 
-	neighs, err := netlink.NeighList(gw.LinkIndex, syscall.AF_INET)
+	neighs, err := getNeighs(gw)
 	if err != nil {
 		panic(err)
 	}
 
-	link, err := netlink.LinkByIndex(gw.LinkIndex)
+	link, err := linkByIndex(gw)
 	if err != nil {
 		panic(err)
 	}
